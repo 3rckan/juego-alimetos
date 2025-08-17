@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriKids - Cómo Funciona</title>
+    <style>
+        :root {
+            --verde: #4CAF50;
+            --rojo: #F44336;
+            --amarillo: #FFC107;
+            --azul: #2196F3;
+            --morado: #9C27B0;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .contenedor {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: var(--azul);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .seccion-funciona {
+            background-color: #F9F9F9;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--azul);
+        }
+        
+        .paso {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .icono {
+            font-size: 1.8em;
+            margin-right: 15px;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .explicacion {
+            flex: 1;
+        }
+        
+        .resultado {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .positivo {
+            background-color: #E8F5E9;
+            color: var(--verde);
+        }
+        
+        .negativo {
+            background-color: #FFEBEE;
+            color: var(--rojo);
+        }
+        
+        .boton-volver {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--morado);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .boton-volver:hover {
+            transform: scale(1.05);
+            background-color: #7B1FA2;
+        }
+        
+        .ejemplo-nivel {
+            background-color: #E3F2FD;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>📚 Cómo Funciona el Juego</h1>
+        
+        <div class="seccion-funciona">
+            <div class="paso">
+                <div class="icono">🖼️</div>
+                <div class="explicacion">
+                    <h3>1. Selección de Alimentos</h3>
+                    <p>Se muestran dos opciones gráficas: un alimento saludable y uno chatarra.</p>
+                    <img src="https://via.placeholder.com/400x200?text=Ejemplo+de+Pantalla+de+Selección" alt="Pantalla de selección" style="width:100%; border-radius:10px; margin-top:10px;">
+                </div>
+            </div>
+            
+            <div class="paso">
+                <div class="icono">🖱️</div>
+                <div class="explicacion">
+                    <h3>2. Toma tu Decisión</h3>
+                    <p>El usuario hace clic en uno de los alimentos mostrados.</p>
+                </div>
+            </div>
+            
+            <div class="paso">
+                <div class="icono">📊</div>
+                <div class="explicacion">
+                    <h3>3. Resultados</h3>
+                    
+                    <div class="resultado positivo">
+                        <span class="icono">✔️</span>
+                        <div>
+                            <strong>Si escoge el saludable:</strong>
+                            <p>Gana puntos 💷 + Aparece un dato curioso positivo.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="resultado negativo">
+                        <span class="icono">✗</span>
+                        <div>
+                            <strong>Si escoge el chatarra:</strong>
+                            <p>No gana puntos + Aparece advertencia o dato curioso negativo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="paso">
+                <div class="icono">🎮</div>
+                <div class="explicacion">
+                    <h3>4. Sistema de Niveles</h3>
+                    <p>Se muestran series de 5 imágenes (rondas). Al completarlas, subes de nivel.</p>
+                    
+                    <div class="ejemplo-nivel">
+                        <p><strong>Ejemplo de progreso:</strong></p>
+                        <p>nivel: "02"</p>
+                        <p>puntos: "150"</p>
+                        <p>volver | continuar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <a href="index.html" class="boton-volver">¡Entendido! Quiero Jugar</a>
+    </div>
+</body>
+</html>
