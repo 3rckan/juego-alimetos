@@ -1,0 +1,53 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f9ff; /* Fondo claro */
+    margin: 0;
+    padding: 0;
+}
+
+/* Menú Vertical */
+.menu-vertical {
+    width: 200px;
+    background-color: #4CAF50; /* Verde */
+    padding: 20px;
+    border-radius: 10px; /* Bordes redondeados */
+    margin: 20px;
+}
+
+.menu-vertical ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-vertical li {
+    margin: 15px 0;
+}
+
+.menu-vertical a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px;
+    display: block;
+}
+
+.menu-vertical a:hover {
+    background-color: #3e8e41; /* Verde oscuro al pasar el mouse */
+    border-left: 3px solid white; /* Borde izquierdo efecto */
+}
+
+/* Botones */
+.boton {
+    background-color: #FF9800; /* Naranja */
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.boton:hover {
+    background-color: #e68a00;
+}
