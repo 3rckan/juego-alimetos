@@ -2,38 +2,286 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Juego de Alimentos</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriKids - Aprende sobre Alimentos</title>
+    <style>
+        :root {
+            --verde: #4CAF50;
+            --rojo: #F44336;
+            --amarillo: #FFC107;
+            --azul: #2196F3;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .contenedor-juego {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .nivel, .puntos {
+            background-color: var(--azul);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .opciones {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+        }
+        
+        .opcion {
+            width: 45%;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .opcion:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .opcion img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .opcion p {
+            padding: 15px;
+            margin: 0;
+            font-weight: bold;
+        }
+        
+        .mensaje {
+            min-height: 80px;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .mensaje-positivo {
+            background-color: #E8F5E9;
+            color: var(--verde);
+            border-left: 5px solid var(--verde);
+        }
+        
+        .mensaje-negativo {
+            background-color: #FFEBEE;
+            color: var(--rojo);
+            border-left: 5px solid var(--rojo);
+        }
+        
+        .botones {
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .volver {
+            background-color: #E0E0E0;
+        }
+        
+        .continuar {
+            background-color: var(--amarillo);
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        .progreso {
+            margin: 20px 0;
+            height: 10px;
+            background-color: #E0E0E0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .barra-progreso {
+            height: 100%;
+            background-color: var(--verde);
+            width: 0%;
+            transition: width 0.5s;
+        }
+    </style>
 </head>
 <body>
-    <nav class="menu-vertical">
-        <!-- menu similar q index.html -->
-    </nav>
-
-    <main>
-        <h2>Selecciona un alimento:</h2>
-        <div class="galeria">
-            <!-- Galería de imágenes -->
-            <div class="item-alimento">
-                <img src="alimentos/manzana.jpg" alt="Manzana">
+    <div class="contenedor-juego">
+        <div class="cabecera">
+            <div class="nivel">Nivel: <span id="nivel">01</span></div>
+            <h1>¿Cuál es más saludable?</h1>
+            <div class="puntos">Puntos: <span id="puntos">000</span></div>
+        </div>
+        
+        <div class="progreso">
+            <div class="barra-progreso" id="progreso"></div>
+        </div>
+        
+        <div class="opciones">
+            <div class="opcion" id="opcion1" onclick="elegirOpcion(1)">
+                <img src="alimentos/manzana.jpg" alt="Alimento saludable">
                 <p>Manzana</p>
-                <button class="boton" onclick="mostrarMensaje('La manzana tiene fibra.')">Seleccionar</button>
             </div>
-            <!-- Repite para más alimentos -->
+            <div class="opcion" id="opcion2" onclick="elegirOpcion(2)">
+                <img src="alimentos/donut.jpg" alt="Alimento no saludable">
+                <p>Donut</p>
+            </div>
         </div>
-
-        <div id="mensaje" class="mensaje-oculto">
-            <!-- Mensaje aparecerá aquí -->
+        
+        <div class="mensaje" id="mensaje"></div>
+        
+        <div class="botones">
+            <button class="volver">Volver</button>
+            <button class="continuar" disabled id="continuar">Continuar</button>
         </div>
-    </main>
+    </div>
 
     <script>
-        function mostrarMensaje(texto) {
-            const mensaje = document.getElementById("mensaje");
-            mensaje.innerHTML = `<p>${texto}</p>`;
-            mensaje.classList.remove("mensaje-oculto");
-            mensaje.classList.add("mensaje-visible");
+        // Variables del juego
+        let nivelActual = 1;
+        let puntos = 0;
+        let rondasCompletadas = 0;
+        const rondasPorNivel = 5;
+        
+        // Base de datos de alimentos
+        const alimentos = {
+            saludables: [
+                { nombre: "Manzana", imagen: "manzana.jpg", mensaje: "¡Correcto! Las manzanas son ricas en fibra y vitamina C. +20 puntos" },
+                { nombre: "Brócoli", imagen: "brocoli.jpg", mensaje: "¡Excelente! El brócoli contiene más vitamina C que una naranja. +20 puntos" },
+                { nombre: "Zanahoria", imagen: "zanahoria.jpg", mensaje: "¡Bien hecho! Las zanahorias mejoran la visión nocturna. +20 puntos" }
+            ],
+            noSaludables: [
+                { nombre: "Donut", imagen: "donut.jpg", mensaje: "¡Cuidado! Los donuts tienen mucha azúcar y grasas trans. -10 puntos" },
+                { nombre: "Hamburguesa", imagen: "hamburguesa.jpg", mensaje: "Ocasionalmente está bien, pero no abuses. Tiene muchas calorías. -10 puntos" },
+                { nombre: "Refresco", imagen: "refresco.jpg", mensaje: "Una lata puede contener hasta 10 cucharadas de azúcar. -10 puntos" }
+            ]
+        };
+        
+        // Inicializar juego
+        function cargarRonda() {
+            document.getElementById('continuar').disabled = true;
+            document.getElementById('mensaje').style.display = 'none';
+            
+            // Seleccionar alimentos aleatorios
+            const saludable = alimentos.saludables[Math.floor(Math.random() * alimentos.saludables.length)];
+            const noSaludable = alimentos.noSaludables[Math.floor(Math.random() * alimentos.noSaludables.length)];
+            
+            // Mostrar opciones (50% de probabilidad de que aparezcan en diferente orden)
+            if (Math.random() > 0.5) {
+                document.getElementById('opcion1').innerHTML = `
+                    <img src="alimentos/${saludable.imagen}" alt="${saludable.nombre}">
+                    <p>${saludable.nombre}</p>
+                `;
+                document.getElementById('opcion1').dataset.tipo = 'saludable';
+                document.getElementById('opcion1').dataset.mensaje = saludable.mensaje;
+                
+                document.getElementById('opcion2').innerHTML = `
+                    <img src="alimentos/${noSaludable.imagen}" alt="${noSaludable.nombre}">
+                    <p>${noSaludable.nombre}</p>
+                `;
+                document.getElementById('opcion2').dataset.tipo = 'noSaludable';
+                document.getElementById('opcion2').dataset.mensaje = noSaludable.mensaje;
+            } else {
+                document.getElementById('opcion1').innerHTML = `
+                    <img src="alimentos/${noSaludable.imagen}" alt="${noSaludable.nombre}">
+                    <p>${noSaludable.nombre}</p>
+                `;
+                document.getElementById('opcion1').dataset.tipo = 'noSaludable';
+                document.getElementById('opcion1').dataset.mensaje = noSaludable.mensaje;
+                
+                document.getElementById('opcion2').innerHTML = `
+                    <img src="alimentos/${saludable.imagen}" alt="${saludable.nombre}">
+                    <p>${saludable.nombre}</p>
+                `;
+                document.getElementById('opcion2').dataset.tipo = 'saludable';
+                document.getElementById('opcion2').dataset.mensaje = saludable.mensaje;
+            }
+            
+            // Actualizar progreso
+            document.getElementById('progreso').style.width = `${(rondasCompletadas / rondasPorNivel) * 100}%`;
         }
+        
+        // Elegir opción
+        function elegirOpcion(numOpcion) {
+            const opcion = document.getElementById(`opcion${numOpcion}`);
+            const tipo = opcion.dataset.tipo;
+            const mensaje = opcion.dataset.mensaje;
+            const mensajeDiv = document.getElementById('mensaje');
+            
+            if (tipo === 'saludable') {
+                puntos += 20;
+                mensajeDiv.className = 'mensaje mensaje-positivo';
+            } else {
+                puntos = Math.max(0, puntos - 10);
+                mensajeDiv.className = 'mensaje mensaje-negativo';
+            }
+            
+            // Actualizar puntuación
+            document.getElementById('puntos').textContent = puntos.toString().padStart(3, '0');
+            mensajeDiv.innerHTML = `<p>${mensaje}</p>`;
+            mensajeDiv.style.display = 'block';
+            
+            // Habilitar botón continuar
+            document.getElementById('continuar').disabled = false;
+            
+            // Deshabilitar opciones
+            document.getElementById('opcion1').style.pointerEvents = 'none';
+            document.getElementById('opcion2').style.pointerEvents = 'none';
+        }
+        
+        // Continuar al siguiente nivel
+        document.getElementById('continuar').addEventListener('click', function() {
+            rondasCompletadas++;
+            
+            if (rondasCompletadas >= rondasPorNivel) {
+                nivelActual++;
+                rondasCompletadas = 0;
+                document.getElementById('nivel').textContent = nivelActual.toString().padStart(2, '0');
+                alert(`¡Felicidades! Pasaste al nivel ${nivelActual}`);
+            }
+            
+            // Reiniciar para nueva ronda
+            document.getElementById('opcion1').style.pointerEvents = 'auto';
+            document.getElementById('opcion2').style.pointerEvents = 'auto';
+            cargarRonda();
+        });
+        
+        // Iniciar juego
+        cargarRonda();
     </script>
 </body>
 </html>
