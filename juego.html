@@ -10,6 +10,7 @@
             --rojo: #F44336;
             --amarillo: #FFC107;
             --azul: #2196F3;
+            --morado: #9C27B0;
         }
         
         body {
@@ -27,6 +28,7 @@
             border-radius: 20px;
             padding: 20px;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
         }
         
         .cabecera {
@@ -49,15 +51,18 @@
             display: flex;
             justify-content: space-around;
             margin: 40px 0;
+            flex-wrap: wrap;
         }
         
         .opcion {
             width: 45%;
+            min-width: 250px;
             border-radius: 15px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 10px 0;
         }
         
         .opcion:hover {
@@ -75,6 +80,7 @@
             padding: 15px;
             margin: 0;
             font-weight: bold;
+            font-size: 1.2em;
         }
         
         .mensaje {
@@ -83,6 +89,7 @@
             margin: 20px 0;
             border-radius: 10px;
             display: none;
+            font-size: 1.1em;
         }
         
         .mensaje-positivo {
@@ -99,16 +106,21 @@
         
         .botones {
             margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         
         button {
             padding: 12px 25px;
-            margin: 0 10px;
+            margin: 10px;
             border: none;
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 1em;
+            min-width: 150px;
         }
         
         .volver {
@@ -119,8 +131,14 @@
             background-color: var(--amarillo);
         }
         
+        .inicio {
+            background-color: var(--morado);
+            color: white;
+        }
+        
         button:hover {
             transform: scale(1.05);
+            opacity: 0.9;
         }
         
         .progreso {
@@ -136,6 +154,17 @@
             background-color: var(--verde);
             width: 0%;
             transition: width 0.5s;
+        }
+        
+        @media (max-width: 600px) {
+            .opcion {
+                width: 90%;
+            }
+            
+            .cabecera {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     </style>
 </head>
@@ -165,7 +194,8 @@
         <div class="mensaje" id="mensaje"></div>
         
         <div class="botones">
-            <button class="volver">Volver</button>
+            <button class="volver" id="volver">Volver</button>
+            <button class="inicio" id="inicio">Inicio</button>
             <button class="continuar" disabled id="continuar">Continuar</button>
         </div>
     </div>
@@ -180,14 +210,18 @@
         // Base de datos de alimentos
         const alimentos = {
             saludables: [
-                { nombre: "Manzana", imagen: "manzana.jpg", mensaje: "¡Correcto! Las manzanas son ricas en fibra y vitamina C. +20 puntos" },
-                { nombre: "Brócoli", imagen: "brocoli.jpg", mensaje: "¡Excelente! El brócoli contiene más vitamina C que una naranja. +20 puntos" },
-                { nombre: "Zanahoria", imagen: "zanahoria.jpg", mensaje: "¡Bien hecho! Las zanahorias mejoran la visión nocturna. +20 puntos" }
+                { nombre: "Manzana", imagen: "manzana.jpg", mensaje: "¡Correcto! 🍎 Las manzanas son ricas en fibra y vitamina C. +20 puntos" },
+                { nombre: "Brócoli", imagen: "brocoli.jpg", mensaje: "¡Excelente! 🥦 El brócoli contiene más vitamina C que una naranja. +20 puntos" },
+                { nombre: "Zanahoria", imagen: "zanahoria.jpg", mensaje: "¡Bien hecho! 🥕 Las zanahorias mejoran la visión nocturna. +20 puntos" },
+                { nombre: "Espinaca", imagen: "espinaca.jpg", mensaje: "¡Genial! 🥬 La espinaca tiene hierro y ayuda a los músculos. +20 puntos" },
+                { nombre: "Pescado", imagen: "pescado.jpg", mensaje: "¡Perfecto! 🐟 El pescado tiene omega-3 para tu cerebro. +20 puntos" }
             ],
             noSaludables: [
-                { nombre: "Donut", imagen: "donut.jpg", mensaje: "¡Cuidado! Los donuts tienen mucha azúcar y grasas trans. -10 puntos" },
-                { nombre: "Hamburguesa", imagen: "hamburguesa.jpg", mensaje: "Ocasionalmente está bien, pero no abuses. Tiene muchas calorías. -10 puntos" },
-                { nombre: "Refresco", imagen: "refresco.jpg", mensaje: "Una lata puede contener hasta 10 cucharadas de azúcar. -10 puntos" }
+                { nombre: "Donut", imagen: "donut.jpg", mensaje: "¡Cuidado! 🍩 Los donuts tienen mucha azúcar y grasas trans. -10 puntos" },
+                { nombre: "Hamburguesa", imagen: "hamburguesa.jpg", mensaje: "Ocasionalmente está bien, pero no abuses. 🍔 Tiene muchas calorías. -10 puntos" },
+                { nombre: "Refresco", imagen: "refresco.jpg", mensaje: "¡Alto! 🥤 Una lata puede contener hasta 10 cucharadas de azúcar. -10 puntos" },
+                { nombre: "Papas Fritas", imagen: "papas.jpg", mensaje: "¡Peligro! 🍟 Altas en sodio y grasas saturadas. -10 puntos" },
+                { nombre: "Dulces", imagen: "dulces.jpg", mensaje: "¡Azúcar pura! 🍬 Causan caries y sobrepeso. -10 puntos" }
             ]
         };
         
@@ -231,6 +265,10 @@
                 document.getElementById('opcion2').dataset.mensaje = saludable.mensaje;
             }
             
+            // Habilitar opciones
+            document.getElementById('opcion1').style.pointerEvents = 'auto';
+            document.getElementById('opcion2').style.pointerEvents = 'auto';
+            
             // Actualizar progreso
             document.getElementById('progreso').style.width = `${(rondasCompletadas / rondasPorNivel) * 100}%`;
         }
@@ -271,17 +309,38 @@
                 nivelActual++;
                 rondasCompletadas = 0;
                 document.getElementById('nivel').textContent = nivelActual.toString().padStart(2, '0');
-                alert(`¡Felicidades! Pasaste al nivel ${nivelActual}`);
+                alert(`¡Felicidades! 🎉 Pasaste al nivel ${nivelActual}`);
             }
             
-            // Reiniciar para nueva ronda
-            document.getElementById('opcion1').style.pointerEvents = 'auto';
-            document.getElementById('opcion2').style.pointerEvents = 'auto';
             cargarRonda();
+        });
+        
+        // Botón Volver (ronda anterior)
+        document.getElementById('volver').addEventListener('click', function() {
+            if (rondasCompletadas > 0) {
+                rondasCompletadas--;
+                cargarRonda();
+            } else {
+                alert("¡Estás en la primera ronda!");
+            }
+        });
+        
+        // Botón Inicio (reiniciar juego)
+        document.getElementById('inicio').addEventListener('click', function() {
+            if (confirm("¿Estás seguro que quieres volver al inicio? Perderás tu progreso.")) {
+                nivelActual = 1;
+                puntos = 0;
+                rondasCompletadas = 0;
+                document.getElementById('nivel').textContent = '01';
+                document.getElementById('puntos').textContent = '000';
+                cargarRonda();
+            }
         });
         
         // Iniciar juego
         cargarRonda();
     </script>
+</body>
+</html>
 </body>
 </html>
