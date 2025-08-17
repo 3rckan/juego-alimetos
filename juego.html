@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego de Alimentos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="menu-vertical">
+        <!-- menu similar q index.html -->
+    </nav>
+
+    <main>
+        <h2>Selecciona un alimento:</h2>
+        <div class="galeria">
+            <!-- Galería de imágenes -->
+            <div class="item-alimento">
+                <img src="alimentos/manzana.jpg" alt="Manzana">
+                <p>Manzana</p>
+                <button class="boton" onclick="mostrarMensaje('La manzana tiene fibra.')">Seleccionar</button>
+            </div>
+            <!-- Repite para más alimentos -->
+        </div>
+
+        <div id="mensaje" class="mensaje-oculto">
+            <!-- Mensaje aparecerá aquí -->
+        </div>
+    </main>
+
+    <script>
+        function mostrarMensaje(texto) {
+            const mensaje = document.getElementById("mensaje");
+            mensaje.innerHTML = `<p>${texto}</p>`;
+            mensaje.classList.remove("mensaje-oculto");
+            mensaje.classList.add("mensaje-visible");
+        }
+    </script>
+</body>
+</html>
